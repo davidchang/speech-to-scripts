@@ -1,24 +1,12 @@
 var React = require('react/react');
-var _ = require('lodash/lodash');
 
 var OptionsActions = require('./../actions/OptionsActions');
+
+var Command = require('./Command');
 
 var CommandsTable = React.createClass({
 
   render : function() {
-
-    var linksHtml = _.map(this.props.links, function(link, i) {
-      return (
-        <tr>
-          <td><input value={link.keywords} onChange={this._updateLinkField.bind(this, this.props.linkType, i, 'keywords')} /></td>
-          <td><input value={link.script} onChange={this._updateLinkField.bind(this, this.props.linkType, i, 'script')} /></td>
-          <td><input value={link.domains} onChange={this._updateLinkField.bind(this, this.props.linkType, i, 'domains')} /></td>
-          <td>
-            <button className="button-primary-small" onClick={this._removeRow.bind(this, this.props.linkType, i)}>Remove</button>
-          </td>
-        </tr>
-      );
-    }, this);
 
     return (
       <div>
@@ -31,19 +19,17 @@ var CommandsTable = React.createClass({
               <button className="button-secondary-large" onClick={this._reverseToDefaults.bind(this, this.props.linkType)}>Reset to Defaults</button>
             </div>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>Command</th>
-                <th>Script</th>
-                <th>Domains</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {linksHtml}
-            </tbody>
-          </table>
+
+          <ul>
+            {this.props.commands.map((command, i) => {
+              return (
+                <li>
+                  <Command command={command} linkType={this.props.linkType} index={i} />
+                </li>
+              );
+            }, this)}
+          </ul>
+
         </div>
 
       </div>
@@ -51,12 +37,6 @@ var CommandsTable = React.createClass({
   },
 
   _addNewLink : OptionsActions.addNewLink,
-
-  _updateLinkField : function(linkType, index, field, event) {
-    OptionsActions.updateLinkField(linkType, index, field, event.target.value);
-  },
-
-  _removeRow : OptionsActions.removeLinkRow,
 
   _reverseToDefaults : OptionsActions.reverseToLinkDefaults
 

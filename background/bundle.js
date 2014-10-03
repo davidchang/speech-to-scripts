@@ -56,7 +56,7 @@
 	"use strict";
 	var _ = __webpack_require__(5);
 
-	var getCommands = __webpack_require__(4);
+	var getCommands = __webpack_require__(2);
 
 	/**
 	 * Checks if speech recognition is supported, creates an instance, and starts listening
@@ -156,13 +156,13 @@
 
 /***/ },
 
-/***/ 4:
+/***/ 2:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Q = __webpack_require__(11);
+	var Q = __webpack_require__(10);
 
-	var defaultCommands = __webpack_require__(9);
+	var defaultCommands = __webpack_require__(6);
 
 	var getCommands = function()  {
 
@@ -7367,11 +7367,11 @@
 	    root._ = _;
 	  }
 	}.call(this));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(39)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(42)(module), (function() { return this; }())))
 
 /***/ },
 
-/***/ 9:
+/***/ 6:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7593,7 +7593,7 @@
 
 /***/ },
 
-/***/ 11:
+/***/ 10:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -9501,11 +9501,11 @@
 	return Q;
 
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(36)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(41)))
 
 /***/ },
 
-/***/ 36:
+/***/ 41:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9575,7 +9575,7 @@
 
 /***/ },
 
-/***/ 39:
+/***/ 42:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

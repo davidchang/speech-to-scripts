@@ -24,12 +24,19 @@ class OptionsStore extends BaseStore {
   }
 }
 
-var saveOptions = () => {
+var syncOptions = () => {
   chrome.storage.sync.set({ 'options' : options });
+};
+
+var saveOptions = () => {
   storeInstance.emitChange();
 }
 
 var actions = {};
+
+actions[OptionsConstants.SAVE_OPTIONS] = action => {
+  syncOptions();
+};
 
 actions[OptionsConstants.ADD_NEW_LINK] = action => {
   options[action.linkType].push({

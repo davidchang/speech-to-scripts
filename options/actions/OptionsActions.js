@@ -3,6 +3,12 @@ var OptionsConstants = require('./OptionsConstants');
 
 var OptionsActions = {
 
+  saveOptions: function() {
+    AppDispatcher.handleViewAction({
+      actionType : OptionsConstants.SAVE_OPTIONS
+    });
+  },
+
   addNewLink: function(linkType) {
     AppDispatcher.handleViewAction({
       actionType : OptionsConstants.ADD_NEW_LINK,
