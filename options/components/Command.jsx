@@ -1,11 +1,34 @@
 var React = require('react/react');
+var _ = require('lodash');
 
 var OptionsActions = require('./../actions/OptionsActions');
 
 var Command = React.createClass({
 
-  render : function() {
+  shouldComponentUpdate : function(nextProps, nextState) {
+    var next = _.clone(nextProps, true);
+    var current = _.clone(this.props, true);
 
+    delete next.command.script;
+    delete current.command.script;
+
+    return next == current;
+  },
+
+  componentDidMount : function() {
+    var editor = ace.edit('editor' + this.props.index);
+    editor.setTheme('ace/theme/crimson_editor');
+    editor.getSession().setMode('ace/mode/javascript');
+
+    var updateScript = OptionsActions.updateLinkField.bind(this, this.props.linkType, this.props.index, 'script');
+
+    editor.getSession().on('change', function(e) {
+      updateScript(editor.getValue());
+    });
+  },
+
+  render : function() {
+    // TODO: Styling
     return (
       <section>
         <div>
@@ -16,8 +39,9 @@ var Command = React.createClass({
 
         <div>
           <div>Script</div>
-          <input value={this.props.command.script}
-                 onChange={this._updateLinkField.bind(this, this.props.linkType, this.props.index, 'script')} />
+          <div className="editor" id={'editor' + this.props.index}>
+            {this.props.command.script}
+          </div>
         </div>
 
         <div>

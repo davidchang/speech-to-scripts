@@ -2,19 +2,26 @@ var Q = require('q');
 
 var defaultCommands = require('common/defaultCommands');
 
+// var getCommandsPromise;
+
 var getCommands = () => {
 
-  var promise = Q.defer();
+  // // cache
+  // if (getCommandsPromise) {
+  //   return getCommandsPromise.promise;
+  // }
+
+  var getCommandsPromise = Q.defer();
 
   chrome.storage.sync.get('options', value => {
     if (_.isObject(value.options)) {
-      promise.resolve(value.options || defaultCommands);
+      getCommandsPromise.resolve(value.options || defaultCommands);
     } else {
-      promise.resolve(defaultCommands);
+      getCommandsPromise.resolve(defaultCommands);
     }
   });
 
-  return promise.promise;
+  return getCommandsPromise.promise;
 
 };
 

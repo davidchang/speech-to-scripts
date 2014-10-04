@@ -26,6 +26,8 @@ class OptionsStore extends BaseStore {
 
 var syncOptions = () => {
   chrome.storage.sync.set({ 'options' : options });
+
+  // TODO: send an event to the background job to say that options have been updated
 };
 
 var saveOptions = () => {

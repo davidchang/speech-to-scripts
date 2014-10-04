@@ -5,7 +5,7 @@ require('bootstrap/dist/css/bootstrap.css');
 var OptionsStore = require('./../stores/OptionsStore');
 var OptionsActions = require('./../actions/OptionsActions');
 
-var CommandsTable = require('./CommandsTable');
+var CommandsList = require('./CommandsList');
 
 var getOptionsState = function() {
   return OptionsStore.options;
@@ -29,7 +29,7 @@ var Application = React.createClass({
     return (
       <div>
         <button onClick={this._saveChanges}>Save Changes</button>
-        <CommandsTable commands={this.state.commands} linkType="commands" />
+        <CommandsList commands={this.state.commands} linkType="commands" />
       </div>
     );
   },

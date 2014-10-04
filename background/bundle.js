@@ -83,6 +83,7 @@
 	};
 
 	var recognitionEnded = function()  {
+	  // TODO: revive when recognition ends
 	  console.log('recognition ended!');
 	};
 
@@ -145,13 +146,15 @@
 	      console.log('value', value);
 	    });
 
-	    // TODO just for now, logic needs to fix to chrome.tabs.create only when speechEnabled is falsy
+	    // TODO: just for now, logic needs to fix to chrome.tabs.create only when speechEnabled is falsy
 	    return;
 
 	    chrome.tabs.create({
 	      url : chrome.extension.getURL('permissions/askForPermission.html')
 	    });
 	  }
+
+	  // TODO: populate Chrome storage with defaultCommands preeminently
 	});
 
 /***/ },
@@ -160,23 +163,30 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Q = __webpack_require__(10);
+	var Q = __webpack_require__(15);
 
-	var defaultCommands = __webpack_require__(6);
+	var defaultCommands = __webpack_require__(9);
+
+	// var getCommandsPromise;
 
 	var getCommands = function()  {
 
-	  var promise = Q.defer();
+	  // // cache
+	  // if (getCommandsPromise) {
+	  //   return getCommandsPromise.promise;
+	  // }
+
+	  var getCommandsPromise = Q.defer();
 
 	  chrome.storage.sync.get('options', function(value ) {
 	    if (_.isObject(value.options)) {
-	      promise.resolve(value.options || defaultCommands);
+	      getCommandsPromise.resolve(value.options || defaultCommands);
 	    } else {
-	      promise.resolve(defaultCommands);
+	      getCommandsPromise.resolve(defaultCommands);
 	    }
 	  });
 
-	  return promise.promise;
+	  return getCommandsPromise.promise;
 
 	};
 
@@ -7371,7 +7381,7 @@
 
 /***/ },
 
-/***/ 6:
+/***/ 9:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7593,7 +7603,7 @@
 
 /***/ },
 
-/***/ 10:
+/***/ 15:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
