@@ -28,33 +28,56 @@ var Command = React.createClass({
   },
 
   render : function() {
-    // TODO: Styling
     return (
-      <section>
-        <div>
-          <div>Command</div>
-          <input value={this.props.command.keywords}
+      <form className="form-horizontal command">
+        <div className="form-group">
+          <label className="col-sm-1 control-label"
+                 for={'keywords' + this.props.index}>
+            Command
+          </label>
+          <div className="col-sm-11">
+            <div className="input-group">
+              <input value={this.props.command.keywords}
+                 id={'keywords' + this.props.index}
+                 className="form-control"
                  onChange={this._updateLinkField.bind(this, this.props.linkType, this.props.index, 'keywords')} />
-        </div>
-
-        <div>
-          <div>Script</div>
-          <div className="editor" id={'editor' + this.props.index}>
-            {this.props.command.script}
+                 <span className="input-group-btn">
+                    <button className="btn btn-default"
+                            type="button"
+                            onClick={this._removeRow.bind(this, this.props.linkType, this.props.index)}>
+                      Remove Command
+                    </button>
+                  </span>
+              </div>
           </div>
         </div>
 
-        <div>
-          <div>Domains</div>
-          <input value={this.props.command.domains}
-                 onChange={this._updateLinkField.bind(this, this.props.linkType, this.props.index, 'domains')} />
+        <div className="form-group">
+          <label className="col-sm-1 control-label"
+                 for={'domains' + this.props.index}>
+            Domains
+          </label>
+          <div className="col-sm-11">
+            <input value={this.props.command.domains}
+               id={'domains' + this.props.index}
+               className="form-control"
+               onChange={this._updateLinkField.bind(this, this.props.linkType, this.props.index, 'domains')} />
+          </div>
         </div>
 
-        <div>
-          <button className="button-primary-small" onClick={this._removeRow.bind(this, this.props.linkType, this.props.index)}>Remove</button>
+        <div className="form-group">
+          <label className="col-sm-1 control-label"
+                 for={'editor' + this.props.index}>
+            Script
+          </label>
+          <div className="col-sm-11">
+            <div className="editor" id={'editor' + this.props.index}>
+              {this.props.command.script}
+            </div>
+          </div>
         </div>
 
-      </section>
+      </form>
     );
   },
 

@@ -1,6 +1,7 @@
 var React = require('react/react');
 
 require('bootstrap/dist/css/bootstrap.css');
+require('styles');
 
 var OptionsStore = require('./../stores/OptionsStore');
 var OptionsActions = require('./../actions/OptionsActions');
@@ -28,18 +29,9 @@ var Application = React.createClass({
   render : function() {
     return (
       <div>
-        <button onClick={this._saveChanges}>Save Changes</button>
         <CommandsList commands={this.state.commands} linkType="commands" />
       </div>
     );
-  },
-
-  _updateField : function(field, event) {
-    OptionsActions.updateField(field, event.target.value);
-  },
-
-  _saveChanges : function() {
-    return OptionsActions.saveOptions();
   },
 
   _onChange : function() {
