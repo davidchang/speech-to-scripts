@@ -2,60 +2,9 @@ var _ = require('lodash/lodash');
 
 var getCommands = require('./getCommands');
 
-/**
- * Checks if speech recognition is supported, creates an instance, and starts listening
- */
-var setUpRecognition = () => {
+require('./setUpRecognition')();
 
-  // Create speech recognition object.
-  var speechInput = new webkitSpeechRecognition();
-  speechInput.continuous = true;
-  speechInput.interimResults = false;
-
-  // Set speech API event listeners.
-  speechInput.onstart = recognitionStarted;
-  speechInput.onerror = recognitionFailed;
-  speechInput.onresult = recognitionSucceeded;
-  speechInput.onend = recognitionEnded;
-
-  // Start speech recognition.
-  speechInput.start();
-};
-
-var recognitionStarted = () => {
-  console.log('recognition started!');
-};
-
-var recognitionEnded = () => {
-  // TODO: revive when recognition ends
-  console.log('recognition ended!');
-};
-
-
-/**
- * Callback for unsuccessful speech recognition
- * @param {SpeechRecognitionError} e - The recognition error
- */
-var recognitionFailed = e => {
-  // Send error information
-  console.log('error - recognition failed!', e);
-};
-
-/**
- * Callback for successful speech recognition
- * @param {SpeechRecognitionEvent} e - The speech recognition result event
- */
-var recognitionSucceeded = e => {
-  if (!e.results.length) {
-    return;
-  }
-
-  // Send the most accurate interpretation of the speech.
-
-  var result = e.results[e.resultIndex][0].transcript;
-  result = result.trim().toLowerCase();
-  console.log('result', result);
-
+var processResult = result => {
   getCommands().then(commands => {
 
     var pertinentCommands = _.where(commands.commands, command => {
@@ -78,8 +27,13 @@ var recognitionSucceeded = e => {
   });
 };
 
-
-setUpRecognition();
+chrome.extension.onMessage.addListener(function(message) {
+  switch(message.type) {
+    case 'result':
+      processResult(message.text);
+      break;
+  }
+});
 
 
 

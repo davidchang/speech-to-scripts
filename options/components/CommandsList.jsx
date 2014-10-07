@@ -35,7 +35,7 @@ var CommandsTable = React.createClass({
         <ul className="list-unstyled">
           {this.props.commands.map((command, i) => {
             return (
-              <li>
+              <li key={'command-' + i}>
                 <Command command={command} linkType={this.props.linkType} index={i} />
               </li>
             );

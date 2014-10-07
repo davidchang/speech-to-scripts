@@ -54,64 +54,13 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var _ = __webpack_require__(9);
+	var _ = __webpack_require__(7);
 
-	var getCommands = __webpack_require__(2);
+	var getCommands = __webpack_require__(3);
 
-	/**
-	 * Checks if speech recognition is supported, creates an instance, and starts listening
-	 */
-	var setUpRecognition = function()  {
+	__webpack_require__(4)();
 
-	  // Create speech recognition object.
-	  var speechInput = new webkitSpeechRecognition();
-	  speechInput.continuous = true;
-	  speechInput.interimResults = false;
-
-	  // Set speech API event listeners.
-	  speechInput.onstart = recognitionStarted;
-	  speechInput.onerror = recognitionFailed;
-	  speechInput.onresult = recognitionSucceeded;
-	  speechInput.onend = recognitionEnded;
-
-	  // Start speech recognition.
-	  speechInput.start();
-	};
-
-	var recognitionStarted = function()  {
-	  console.log('recognition started!');
-	};
-
-	var recognitionEnded = function()  {
-	  // TODO: revive when recognition ends
-	  console.log('recognition ended!');
-	};
-
-
-	/**
-	 * Callback for unsuccessful speech recognition
-	 * @param {SpeechRecognitionError} e - The recognition error
-	 */
-	var recognitionFailed = function(e ) {
-	  // Send error information
-	  console.log('error - recognition failed!', e);
-	};
-
-	/**
-	 * Callback for successful speech recognition
-	 * @param {SpeechRecognitionEvent} e - The speech recognition result event
-	 */
-	var recognitionSucceeded = function(e ) {
-	  if (!e.results.length) {
-	    return;
-	  }
-
-	  // Send the most accurate interpretation of the speech.
-
-	  var result = e.results[e.resultIndex][0].transcript;
-	  result = result.trim().toLowerCase();
-	  console.log('result', result);
-
+	var processResult = function(result ) {
 	  getCommands().then(function(commands ) {
 
 	    var pertinentCommands = _.where(commands.commands, function(command ) {
@@ -134,8 +83,13 @@
 	  });
 	};
 
-
-	setUpRecognition();
+	chrome.extension.onMessage.addListener(function(message) {
+	  switch(message.type) {
+	    case 'result':
+	      processResult(message.text);
+	      break;
+	  }
+	});
 
 
 
@@ -159,13 +113,13 @@
 
 /***/ },
 
-/***/ 2:
+/***/ 3:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Q = __webpack_require__(10);
+	var Q = __webpack_require__(33);
 
-	var defaultCommands = __webpack_require__(5);
+	var defaultCommands = __webpack_require__(8);
 
 	// var getCommandsPromise;
 
@@ -194,229 +148,77 @@
 
 /***/ },
 
-/***/ 5:
+/***/ 4:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var baseURLs = {
-	  'search': {
-	    'ask': 'http://www.ask.com/web?q=%s',
-	    'bing': 'http://www.bing.com/search?q=%s',
-	    'google': 'https://www.google.com/search?q=%s',
-	    'yahoo': 'http://search.yahoo.com/search?p=%s'
-	  },
-	  'images': {
-	    'ask': 'http://www.ask.com/pictures?q=%s',
-	    'bing': 'http://www.bing.com/images/search?q=%s',
-	    'flickr': 'http://www.flickr.com/search/?q=%s',
-	    'google': 'https://www.google.com/search?tbm=isch&q=%s',
-	    'imgur': 'http://imgur.com/gallery?q=%s',
-	    'yahoo': 'http://images.search.yahoo.com/search/images?p=%s'
-	  },
-	  'videos': {
-	    'ask': 'http://www.ask.com/youtube?q=%s',
-	    'bing': 'http://www.bing.com/videos/search?q=%s',
-	    'dailymotion': 'http://www.dailymotion.com/relevance/search/%s',
-	    'google': 'https://www.google.com/search?tbm=vid&q=%s',
-	    'hulu': 'http://www.hulu.com/search?q=%s',
-	    'metacafe': 'http://www.metacafe.com/topics/%s',
-	    'netflix': 'http://dvd.netflix.com/Search?v1=%s',
-	    'twitch': 'http://www.twitch.tv/search?query=%s',
-	    'vimeo': 'http://vimeo.com/search?q=%s',
-	    'youtube': 'https://www.youtube.com/results?search_query=%s'
-	  },
-	  'map': {
-	    'google': 'https://maps.google.com/maps?q=%s',
-	    'bing': 'http://www.bing.com/maps/?q=%s',
-	    'yahoo': 'http://maps.yahoo.com/#q=%s'
-	  },
-	  'directions': {
-	    'google': 'http://maps.google.com/maps?daddr=%s'
-	  },
-	  'music':{
-	    'amazon': 'https://www.amazon.com/gp/dmusic/mp3/player#searchSongs/searchTerm=%s',
-	    'google': 'https://play.google.com/music/listen?u=0#%s_sr',
-	    'grooveshark': 'http://grooveshark.com/#!/search?q=%s',
-	    'lastfm': 'http://www.last.fm/search?q=%s',
-	    'pandora': 'http://www.pandora.com/search/%s',
-	    'soundcloud': 'https://soundcloud.com/search?q=%s',
-	    'spotify': 'https://play.spotify.com/search/%s',
-	    'youtube': 'http://www.youtube.com/results?search_query=%s'
-	  }
+	/**
+	 * Checks if speech recognition is supported, creates an instance, and starts listening
+	 */
+	var setUpRecognition = function()  {
+
+	  // Create speech recognition object.
+	  var speechInput = new webkitSpeechRecognition();
+	  speechInput.continuous = true;
+	  speechInput.interimResults = false;
+
+	  // Set speech API event listeners.
+	  speechInput.onstart = recognitionStarted;
+	  speechInput.onerror = recognitionFailed;
+	  speechInput.onresult = recognitionSucceeded;
+	  speechInput.onend = recognitionEnded;
+
+	  // Start speech recognition.
+	  speechInput.start();
 	};
 
-	var convertFunctionToString = function(fn ) {return (("(" + (fn.toString())) + ")()")};
-
-	var search = function()  {
-	  var options = {
-	    'ask': 'http://www.ask.com/web?q=%s',
-	    'bing': 'http://www.bing.com/search?q=%s',
-	    'google': 'https://www.google.com/search?q=%s',
-	    'yahoo': 'http://search.yahoo.com/search?p=%s'
-	  };
-	  var query = captured[0];
-
-	  var getSearchEngineRegex = new RegExp('(.*) on (google|bing|ask|yahoo)$');
-	  var searchEngine = getSearchEngineRegex.exec(query);
-
-	  if (!searchEngine) {
-	    searchEngine = 'google';
-	  } else {
-	    query = searchEngine[searchEngine.length - 2];
-	    searchEngine = searchEngine[searchEngine.length - 1];
-	    if (!options[searchEngine]) {
-	      searchEngine = 'google';
-	    }
-	  }
-
-	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	var recognitionStarted = function()  {
+	  console.log('recognition started!');
 	};
 
-	var imageSearch = function()  {
-	  var options = {
-	    'ask': 'http://www.ask.com/pictures?q=%s',
-	    'bing': 'http://www.bing.com/images/search?q=%s',
-	    'flickr': 'http://www.flickr.com/search/?q=%s',
-	    'google': 'https://www.google.com/search?tbm=isch&q=%s',
-	    'imgur': 'http://imgur.com/gallery?q=%s',
-	    'yahoo': 'http://images.search.yahoo.com/search/images?p=%s'
-	  };
-	  var query = captured[0];
+	var recognitionEnded = function()  {
+	  console.log('recognition ended!');
 
-	  var getSearchEngineRegex = new RegExp('(.*) on (ask|bing|flickr|google|imgur|yahoo)$');
-	  var searchEngine = getSearchEngineRegex.exec(query);
-
-	  if (!searchEngine) {
-	    searchEngine = 'google';
-	  } else {
-	    query = searchEngine[searchEngine.length - 2];
-	    searchEngine = searchEngine[searchEngine.length - 1];
-	    if (!options[searchEngine]) {
-	      searchEngine = 'google';
-	    }
-	  }
-
-	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	  console.log('reviving recognition!');
+	  setTimeout(setUpRecognition);
 	};
 
-	var videoSearch = function()  {
-	  var options = {
-	    'ask': 'http://www.ask.com/youtube?q=%s',
-	    'bing': 'http://www.bing.com/videos/search?q=%s',
-	    'dailymotion': 'http://www.dailymotion.com/relevance/search/%s',
-	    'google': 'https://www.google.com/search?tbm=vid&q=%s',
-	    'hulu': 'http://www.hulu.com/search?q=%s',
-	    'metacafe': 'http://www.metacafe.com/topics/%s',
-	    'netflix': 'http://dvd.netflix.com/Search?v1=%s',
-	    'twitch': 'http://www.twitch.tv/search?query=%s',
-	    'vimeo': 'http://vimeo.com/search?q=%s',
-	    'youtube': 'https://www.youtube.com/results?search_query=%s'
-	  };
-	  var query = captured[0];
 
-	  var getSearchEngineRegex = new RegExp('(.*) on (ask|bing|dailymotion|google|hulu|metacafe|netflix|twitch|vimeo|youtube)$');
-	  var searchEngine = getSearchEngineRegex.exec(query);
-
-	  if (!searchEngine) {
-	    searchEngine = 'youtube';
-	  } else {
-	    query = searchEngine[searchEngine.length - 2];
-	    searchEngine = searchEngine[searchEngine.length - 1];
-	    if (!options[searchEngine]) {
-	      searchEngine = 'youtube';
-	    }
-	  }
-
-	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	/**
+	 * Callback for unsuccessful speech recognition
+	 * @param {SpeechRecognitionError} e - The recognition error
+	 */
+	var recognitionFailed = function(e ) {
+	  // Send error information
+	  console.log('error - recognition failed!', e);
 	};
 
-	var musicSearch = function()  {
-	  var options = {
-	    'amazon': 'https://www.amazon.com/gp/dmusic/mp3/player#searchSongs/searchTerm=%s',
-	    'google': 'https://play.google.com/music/listen?u=0#%s_sr',
-	    'grooveshark': 'http://grooveshark.com/#!/search?q=%s',
-	    'lastfm': 'http://www.last.fm/search?q=%s',
-	    'pandora': 'http://www.pandora.com/search/%s',
-	    'soundcloud': 'https://soundcloud.com/search?q=%s',
-	    'spotify': 'https://play.spotify.com/search/%s',
-	    'youtube': 'http://www.youtube.com/results?search_query=%s'
-	  };
-	  var query = captured[0];
-
-	  var getSearchEngineRegex = new RegExp('(.*) on (amazon|google|grooveshark|lastfm|pandora|soundcloud|spotify|youtube)$');
-	  var searchEngine = getSearchEngineRegex.exec(query);
-
-	  if (!searchEngine) {
-	    searchEngine = 'youtube';
-	  } else {
-	    query = searchEngine[searchEngine.length - 2];
-	    searchEngine = searchEngine[searchEngine.length - 1];
-	    if (!options[searchEngine]) {
-	      searchEngine = 'youtube';
-	    }
+	/**
+	 * Callback for successful speech recognition
+	 * @param {SpeechRecognitionEvent} e - The speech recognition result event
+	 */
+	var recognitionSucceeded = function(e ) {
+	  if (!e.results.length) {
+	    return;
 	  }
 
-	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	  var result = e.results[e.resultIndex][0].transcript;
+	  result = result.trim().toLowerCase();
+
+	  console.log('recognition succeeded!', result);
+
+	  // Send the most accurate interpretation of the speech.
+	  chrome.extension.sendMessage({
+	    type: 'result',
+	    text: result
+	  });
 	};
 
-	var defaultCommands = [
-	  {
-	    'keywords' : '^alert hello',
-	    'script' : 'alert("hello");',
-	    'domains' : '*'
-	  },
-	  {
-	    'keywords' : '^show me google',
-	    'script' : 'window.open("http://google.com")',
-	    'domains' : '*'
-	  },
-	  {
-	    'keywords' : '^open my tabs',
-	    'script' : 'window.open("http://facebook.com");window.open("http://twitter.com");window.open("http://echojs.com");',
-	    'domains' : '*'
-	  },
-	  {
-	    'keywords' : '^search for (.*)',
-	    'regex' : true,
-	    'script' : convertFunctionToString(search),
-	    'domains' : '*'
-	  },
-	  {
-	    'keywords' : '^show me (?:pictures|images|pics|an image|a picture|a pic) of (.*)',
-	    'regex' : true,
-	    'script' : convertFunctionToString(imageSearch),
-	    'domains' : '*'
-	  },
-	  {
-	    'keywords' : '^show me (?:videos|a video|a vid) of (.*)',
-	    'regex' : true,
-	    'script' : convertFunctionToString(videoSearch),
-	    'domains' : '*'
-	  },
-	  {
-	    'keywords' : '^show me a map of (.*)',
-	    'regex' : true,
-	    'script' : 'window.open("http://facebook.com");',
-	    'domains' : '*'
-	  },
-	  {
-	    'keywords' : '^get directions to (.*) from (.*)',
-	    'regex' : true,
-	    'script' : 'window.open("http://facebook.com");',
-	    'domains' : '*'
-	  },
-	  {
-	    'keywords' : '^play (.*)',
-	    'script' : convertFunctionToString(musicSearch),
-	    'domains' : '*'
-	  }
-	];
-
-	module.exports = defaultCommands;
+	module.exports = setUpRecognition;
 
 /***/ },
 
-/***/ 9:
+/***/ 7:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {"use strict";
@@ -7599,11 +7401,220 @@
 	    root._ = _;
 	  }
 	}.call(this));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(46)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(102)(module), (function() { return this; }())))
 
 /***/ },
 
-/***/ 10:
+/***/ 8:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var convertFunctionToString = function(fn ) {return (("(" + (fn.toString())) + ")()")};
+
+	// TODO can this be replaced with ES6 interpolated strings?
+	var search = function()  {
+	  var options = {
+	    'ask': 'http://www.ask.com/web?q=%s',
+	    'bing': 'http://www.bing.com/search?q=%s',
+	    'google': 'https://www.google.com/search?q=%s',
+	    'yahoo': 'http://search.yahoo.com/search?p=%s'
+	  };
+	  var query = captured[0];
+
+	  var getSearchEngineRegex = new RegExp('(.*) on (google|bing|ask|yahoo)$');
+	  var searchEngine = getSearchEngineRegex.exec(query);
+
+	  if (!searchEngine) {
+	    searchEngine = 'google';
+	  } else {
+	    query = searchEngine[searchEngine.length - 2];
+	    searchEngine = searchEngine[searchEngine.length - 1];
+	    if (!options[searchEngine]) {
+	      searchEngine = 'google';
+	    }
+	  }
+
+	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	};
+
+	var imageSearch = function()  {
+	  var options = {
+	    'ask': 'http://www.ask.com/pictures?q=%s',
+	    'bing': 'http://www.bing.com/images/search?q=%s',
+	    'flickr': 'http://www.flickr.com/search/?q=%s',
+	    'google': 'https://www.google.com/search?tbm=isch&q=%s',
+	    'imgur': 'http://imgur.com/gallery?q=%s',
+	    'yahoo': 'http://images.search.yahoo.com/search/images?p=%s'
+	  };
+	  var query = captured[0];
+
+	  var getSearchEngineRegex = new RegExp('(.*) on (ask|bing|flickr|google|imgur|yahoo)$');
+	  var searchEngine = getSearchEngineRegex.exec(query);
+
+	  if (!searchEngine) {
+	    searchEngine = 'google';
+	  } else {
+	    query = searchEngine[searchEngine.length - 2];
+	    searchEngine = searchEngine[searchEngine.length - 1];
+	    if (!options[searchEngine]) {
+	      searchEngine = 'google';
+	    }
+	  }
+
+	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	};
+
+	var videoSearch = function()  {
+	  var options = {
+	    'ask': 'http://www.ask.com/youtube?q=%s',
+	    'bing': 'http://www.bing.com/videos/search?q=%s',
+	    'dailymotion': 'http://www.dailymotion.com/relevance/search/%s',
+	    'google': 'https://www.google.com/search?tbm=vid&q=%s',
+	    'hulu': 'http://www.hulu.com/search?q=%s',
+	    'metacafe': 'http://www.metacafe.com/topics/%s',
+	    'netflix': 'http://dvd.netflix.com/Search?v1=%s',
+	    'twitch': 'http://www.twitch.tv/search?query=%s',
+	    'vimeo': 'http://vimeo.com/search?q=%s',
+	    'youtube': 'https://www.youtube.com/results?search_query=%s'
+	  };
+	  var query = captured[0];
+
+	  var getSearchEngineRegex = new RegExp('(.*) on (ask|bing|dailymotion|google|hulu|metacafe|netflix|twitch|vimeo|youtube)$');
+	  var searchEngine = getSearchEngineRegex.exec(query);
+
+	  if (!searchEngine) {
+	    searchEngine = 'youtube';
+	  } else {
+	    query = searchEngine[searchEngine.length - 2];
+	    searchEngine = searchEngine[searchEngine.length - 1];
+	    if (!options[searchEngine]) {
+	      searchEngine = 'youtube';
+	    }
+	  }
+
+	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	};
+
+	var mapSearch = function()  {
+	  var options = {
+	    'google': 'https://maps.google.com/maps?q=%s',
+	    'bing': 'http://www.bing.com/maps/?q=%s',
+	    'yahoo': 'http://maps.yahoo.com/#q=%s'
+	  };
+	  var query = captured[0];
+
+	  var getSearchEngineRegex = new RegExp('(.*) on (google|bing|yahoo)$');
+	  var searchEngine = getSearchEngineRegex.exec(query);
+
+	  if (!searchEngine) {
+	    searchEngine = 'google';
+	  } else {
+	    query = searchEngine[searchEngine.length - 2];
+	    searchEngine = searchEngine[searchEngine.length - 1];
+	    if (!options[searchEngine]) {
+	      searchEngine = 'google';
+	    }
+	  }
+
+	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	};
+
+	var directionsSearch = function()  {
+	  var options = {
+	    'google': 'http://maps.google.com/maps?daddr=%s'
+	  };
+	  var query = captured[0];
+
+	  window.open(options.google.replace('%s', encodeURIComponent(query)));
+	};
+
+	var musicSearch = function()  {
+	  var options = {
+	    'amazon': 'https://www.amazon.com/gp/dmusic/mp3/player#searchSongs/searchTerm=%s',
+	    'google': 'https://play.google.com/music/listen?u=0#%s_sr',
+	    'grooveshark': 'http://grooveshark.com/#!/search?q=%s',
+	    'lastfm': 'http://www.last.fm/search?q=%s',
+	    'pandora': 'http://www.pandora.com/search/%s',
+	    'soundcloud': 'https://soundcloud.com/search?q=%s',
+	    'spotify': 'https://play.spotify.com/search/%s',
+	    'youtube': 'http://www.youtube.com/results?search_query=%s'
+	  };
+	  var query = captured[0];
+
+	  var getSearchEngineRegex = new RegExp('(.*) on (amazon|google|grooveshark|lastfm|pandora|soundcloud|spotify|youtube)$');
+	  var searchEngine = getSearchEngineRegex.exec(query);
+
+	  if (!searchEngine) {
+	    searchEngine = 'youtube';
+	  } else {
+	    query = searchEngine[searchEngine.length - 2];
+	    searchEngine = searchEngine[searchEngine.length - 1];
+	    if (!options[searchEngine]) {
+	      searchEngine = 'youtube';
+	    }
+	  }
+
+	  window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
+	};
+
+	var defaultCommands = [
+	  {
+	    'keywords' : '^alert hello',
+	    'script' : 'alert("hello");',
+	    'domains' : '*'
+	  },
+	  {
+	    'keywords' : '^show me google',
+	    'script' : 'window.open("http://google.com")',
+	    'domains' : '*'
+	  },
+	  {
+	    'keywords' : '^open my tabs',
+	    'script' : 'window.open("http://facebook.com");window.open("http://twitter.com");window.open("http://echojs.com");',
+	    'domains' : '*'
+	  },
+	  {
+	    'keywords' : '^search for (.*)',
+	    'regex' : true,
+	    'script' : convertFunctionToString(search),
+	    'domains' : '*'
+	  },
+	  {
+	    'keywords' : '^show me (?:pictures|images|pics|an image|a picture|a pic) of (.*)',
+	    'regex' : true,
+	    'script' : convertFunctionToString(imageSearch),
+	    'domains' : '*'
+	  },
+	  {
+	    'keywords' : '^show me (?:videos|a video|a vid) of (.*)',
+	    'regex' : true,
+	    'script' : convertFunctionToString(videoSearch),
+	    'domains' : '*'
+	  },
+	  {
+	    'keywords' : '^show me a map of (.*)',
+	    'regex' : true,
+	    'script' : convertFunctionToString(mapSearch),
+	    'domains' : '*'
+	  },
+	  {
+	    'keywords' : '^get directions to (.*) from (.*)',
+	    'regex' : true,
+	    'script' : convertFunctionToString(directionsSearch),
+	    'domains' : '*'
+	  },
+	  {
+	    'keywords' : '^play (.*)',
+	    'script' : convertFunctionToString(musicSearch),
+	    'domains' : '*'
+	  }
+	];
+
+	module.exports = defaultCommands;
+
+/***/ },
+
+/***/ 33:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -9511,28 +9522,11 @@
 	return Q;
 
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(47)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(43)))
 
 /***/ },
 
-/***/ 46:
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-/***/ },
-
-/***/ 47:
+/***/ 43:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9599,6 +9593,23 @@
 	process.chdir = function (dir) {
 	    throw new Error('process.chdir is not supported');
 	};
+
+/***/ },
+
+/***/ 102:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
 
 /***/ }
 
