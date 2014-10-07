@@ -4,13 +4,35 @@ var getCommands = require('./getCommands');
 
 require('./setUpRecognition')();
 
+// typeof script === string
+// typeof args === array
+var convertFunctionToString = (script, args) => {
+  return `(function(captured) { eval(${script}); })('${args.toString()}')`;
+};
+
+var execute = (script, args) => {
+  chrome.tabs.executeScript({ 'file' : 'background/jquery.min.js' }, () => {
+
+    if (chrome.runtime.lastError) {
+      console.log(`ERROR executing script: ${chrome.runtime.lastError.message}`);
+    }
+
+    chrome.tabs.executeScript({ 'code' : convertFunctionToString(script, args) }, () => {
+      if (chrome.runtime.lastError) {
+        console.log(`ERROR executing script: ${chrome.runtime.lastError.message}`);
+      }
+    });
+  });
+}
+
 var processResult = result => {
   getCommands().then(commands => {
 
     var pertinentCommands = _.where(commands.commands, command => {
-      if (!command.regex) {
-        return command.keywords.toLowerCase() == result;
-      }
+      console.log('command.keywords', command.keywords);
+      // if (!command.regex) {
+      //   return command.keywords.toLowerCase() == result;
+      // }
 
       // probably don't want to do this everytime
       var regex = new RegExp(command.keywords);
@@ -21,7 +43,8 @@ var processResult = result => {
     _.each(pertinentCommands, command => {
       var regex = new RegExp(command.keywords);
       console.log('command.script', command.script);
-      (captured => eval(command.script))(regex.exec(result).splice(1));
+      execute(command.script, regex.exec(result).splice(1));
+      // (captured => eval(command.script))(regex.exec(result).splice(1));
     });
 
   });

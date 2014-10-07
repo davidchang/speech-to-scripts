@@ -6,3 +6,5 @@ node_modules
 *.woff
 *.eot
 *.ttf
+
+**/bundle.js

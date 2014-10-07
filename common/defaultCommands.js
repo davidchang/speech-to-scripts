@@ -146,6 +146,19 @@ var musicSearch = () => {
   window.open(options[searchEngine].replace('%s', encodeURIComponent(query)));
 };
 
+var clickOn = () => {
+  var query = captured[0];
+
+  console.log('query');
+
+  $('a, button').each(() => {
+    console.log('$(this).text().toLowerCase()', $(this).text().toLowerCase());
+    if (query === $(this).text().toLowerCase()) {
+      $(this).click();
+    }
+  })
+};
+
 var defaultCommands = [
   {
     'keywords' : '^alert hello',
@@ -164,39 +177,41 @@ var defaultCommands = [
   },
   {
     'keywords' : '^search for (.*)',
-    'regex' : true,
     'script' : convertFunctionToString(search),
     'domains' : '*'
   },
-  {
-    'keywords' : '^show me (?:pictures|images|pics|an image|a picture|a pic) of (.*)',
-    'regex' : true,
-    'script' : convertFunctionToString(imageSearch),
-    'domains' : '*'
-  },
-  {
-    'keywords' : '^show me (?:videos|a video|a vid) of (.*)',
-    'regex' : true,
-    'script' : convertFunctionToString(videoSearch),
-    'domains' : '*'
-  },
-  {
-    'keywords' : '^show me a map of (.*)',
-    'regex' : true,
-    'script' : convertFunctionToString(mapSearch),
-    'domains' : '*'
-  },
-  {
-    'keywords' : '^get directions to (.*) from (.*)',
-    'regex' : true,
-    'script' : convertFunctionToString(directionsSearch),
-    'domains' : '*'
-  },
+  // {
+  //   'keywords' : '^show me (?:pictures|images|pics|an image|a picture|a pic) of (.*)',
+  //   'script' : convertFunctionToString(imageSearch),
+  //   'domains' : '*'
+  // },
+  // {
+  //   'keywords' : '^show me (?:videos|a video|a vid) of (.*)',
+  //   'script' : convertFunctionToString(videoSearch),
+  //   'domains' : '*'
+  // },
+  // {
+  //   'keywords' : '^show me a map of (.*)',
+  //   'script' : convertFunctionToString(mapSearch),
+  //   'domains' : '*'
+  // },
+  // {
+  //   'keywords' : '^get directions to (.*) from (.*)',
+  //   'script' : convertFunctionToString(directionsSearch),
+  //   'domains' : '*'
+  // },
   {
     'keywords' : '^play (.*)',
     'script' : convertFunctionToString(musicSearch),
     'domains' : '*'
+  },
+  {
+    'keywords' : '^click on (.*)',
+    'script' : convertFunctionToString(clickOn),
+    'domains' : '*'
   }
 ];
+
+console.log('convertFunctionToString(clickOn)', convertFunctionToString(clickOn));
 
 module.exports = defaultCommands;
