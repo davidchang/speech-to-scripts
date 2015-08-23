@@ -1,8 +1,9 @@
-var _ = require('lodash/lodash');
+import _ from 'lodash';
+import * as speechRecognition from './speechRecognition';
+
+import getActivated from './getActivated';
 
 var getCommands = require('./getCommands');
-
-require('./setUpRecognition')();
 
 // typeof script === string
 // typeof args === array
@@ -28,7 +29,9 @@ var execute = (script, args) => {
 var processResult = result => {
   getCommands().then(commands => {
 
-    var pertinentCommands = _.where(commands.commands, command => {
+    console.log('commands', commands);
+
+    var pertinentCommands = _.filter(commands.commands, command => {
       // console.log('command.keywords', command.keywords);
       // if (!command.regex) {
       //   return command.keywords.toLowerCase() == result;
@@ -36,19 +39,18 @@ var processResult = result => {
 
       // probably don't want to do this everytime
       var regex = new RegExp(command.keywords);
-
       return regex.test(result);
     });
 
     _.each(pertinentCommands, command => {
       var regex = new RegExp(command.keywords);
       // console.log('command.script', command.script);
-      console.log('command', command);
+      console.log('command running:', command);
 
       // if (command.domains !== '*') {
-        execute(command.script, regex.exec(result).splice(1));
+      //   execute(command.script, regex.exec(result).splice(1));
       // } else {
-      //   (captured => eval(command.script))(regex.exec(result).splice(1));
+        (captured => eval(command.script))(regex.exec(result).splice(1));
       // }
     });
 
@@ -63,6 +65,20 @@ chrome.extension.onMessage.addListener(function(message) {
   }
 });
 
+chrome.browserAction.onClicked.addListener(function() {
+  // if it's already activated
+  getActivated()
+    .then(() => {
+      // then we're toggling off
+      chrome.storage.sync.set({'activated' : false}, () => console.log('speech recognition deactivated'));
+    }, () => {
+      // else, we're toggling on
+      chrome.storage.sync.set({'activated' : true}, () => {
+        console.log('speech recognition activated');
+        speechRecognition.start();
+      });
+    });
+});
 
 
 chrome.runtime.onInstalled.addListener(details => {
@@ -80,5 +96,5 @@ chrome.runtime.onInstalled.addListener(details => {
     });
   }
 
-  // TODO: populate Chrome storage with defaultCommands preeminently
+  // TODO: populate Chrome storage with defaultCommands preemptively
 });
