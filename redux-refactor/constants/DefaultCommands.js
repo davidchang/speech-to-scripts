@@ -236,6 +236,4 @@ var defaultCommands = [
   }
 ];
 
-console.log('convertFunctionToString(clickOn)', convertFunctionToString(clickOn));
-
-module.exports = defaultCommands;
+export default defaultCommands;

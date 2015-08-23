@@ -29,7 +29,7 @@ var processResult = result => {
   getCommands().then(commands => {
 
     var pertinentCommands = _.where(commands.commands, command => {
-      console.log('command.keywords', command.keywords);
+      // console.log('command.keywords', command.keywords);
       // if (!command.regex) {
       //   return command.keywords.toLowerCase() == result;
       // }
@@ -42,9 +42,14 @@ var processResult = result => {
 
     _.each(pertinentCommands, command => {
       var regex = new RegExp(command.keywords);
-      console.log('command.script', command.script);
-      execute(command.script, regex.exec(result).splice(1));
-      // (captured => eval(command.script))(regex.exec(result).splice(1));
+      // console.log('command.script', command.script);
+      console.log('command', command);
+
+      // if (command.domains !== '*') {
+        execute(command.script, regex.exec(result).splice(1));
+      // } else {
+      //   (captured => eval(command.script))(regex.exec(result).splice(1));
+      // }
     });
 
   });
