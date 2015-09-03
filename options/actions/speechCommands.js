@@ -9,6 +9,10 @@ export function save() {
   return { type: types.SAVE };
 }
 
+export function remove(index) {
+  return { type: types.REMOVE, index };
+}
+
 export function restoreDefaults() {
   return { type: types.RESTORE_DEFAULTS };
 }
@@ -29,4 +33,8 @@ export function loadSpeechCommands() {
       }
     });
   };
+}
+
+export function logDebugMessage(debugMessage) {
+  return { type: types.LOG_DEBUG_MESSAGE, debugMessage };
 }

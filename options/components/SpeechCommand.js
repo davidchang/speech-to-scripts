@@ -23,20 +23,29 @@ class SpeechCommand extends Component {
 
     return (
       <section>
+        <div style={{marginBottom: '5px'}}>
+          <strong>Regular expression to match speech</strong>:
+          <a style={{float : 'right'}} href="#" onClick={() => this.props.actions.remove(id)}>Remove</a>
+        </div>
+
         <div>
           <input
-            style={{width: '100%', 'margin-bottom' : '10px'}}
+            style={{width: '100%', 'marginBottom' : '10px'}}
             type="text"
             value={command.keywords}
             placeholder="Command here"
             onChange={onKeywordChange} />
         </div>
 
+        <div style={{marginBottom: '5px'}}>
+          <strong>Script to execute</strong> (utilize the `captured` array, as well as jQuery):
+        </div>
+
         <AceEditor
           mode="javascript"
           theme="github"
           width="100%"
-          maxLines="20"
+          maxLines={20}
           onChange={onScriptChange}
           value={command.script}
           name={`command-${id}`} />
@@ -46,7 +55,7 @@ class SpeechCommand extends Component {
 }
 
 SpeechCommand.propTypes = {
-  id: PropTypes.object.isRequired,
+  id: PropTypes.number.isRequired,
   command: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 };

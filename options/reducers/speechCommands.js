@@ -3,7 +3,10 @@ import { combineReducers } from 'redux';
 import DEFAULT_COMMANDS from '../constants/DefaultCommands';
 
 const initialState = {
-  commands : []
+  commands : [],
+  debugMessage : {
+    text: "next song"
+  }
 };
 
 export default function speechCommands(state = initialState, action) {
@@ -48,9 +51,20 @@ export default function speechCommands(state = initialState, action) {
       commands : action.speechCommands.commands
     };
 
+  // TODO implement - still buggy in combination with react-ace-editor
   case types.REMOVE:
     return {
-      ...state
+      ...state,
+      commands : state.commands.filter((command, i) => i !== action.index)
+    };
+
+  case types.LOG_DEBUG_MESSAGE:
+    return {
+      ...state,
+      debugMessage : action.debugMessage,
+      commands : state.commands.map((command) => {
+        return command;
+      })
     };
 
   default:

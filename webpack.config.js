@@ -5,7 +5,7 @@ module.exports = {
   devtool: 'cheap-module-eval-source-map',
   entry : {
     options : './options/index.js',
-    background : './background/webpackEntry.js'
+    background : './background/index.js'
   },
   output : {
     path: __dirname,

@@ -5,6 +5,8 @@ import getActivated from './getActivated';
  */
 export function start() {
 
+  let errorOccurred = false;
+
   let recognitionStarted = () => {
     console.log('recognition started!');
   };
@@ -12,8 +14,12 @@ export function start() {
   let recognitionEnded = () => {
     console.log('recognition ended!');
 
-    console.log('reviving recognition!');
-    setTimeout(start);
+    if (!errorOccurred) {
+      console.log('reviving recognition!');
+      setTimeout(start);
+    } else {
+      console.log('an error had occurred, not reviving recognition');
+    }
   };
 
 
@@ -24,6 +30,9 @@ export function start() {
   let recognitionFailed = e => {
     // Send error information
     console.log('error - recognition failed!', e);
+    if (e.error === 'aborted') {
+      errorOccurred = true;
+    }
   };
 
   /**

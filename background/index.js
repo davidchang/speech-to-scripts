@@ -70,15 +70,32 @@ chrome.browserAction.onClicked.addListener(function() {
   getActivated()
     .then(() => {
       // then we're toggling off
-      chrome.storage.sync.set({'activated' : false}, () => console.log('speech recognition deactivated'));
+      chrome.storage.sync.set({'activated' : false}, () => {
+        console.log('speech recognition deactivated');
+        chrome.browserAction.setBadgeText({text : 'Off'});
+        chrome.browserAction.setBadgeBackgroundColor({color : '#FF0000'});
+      });
     }, () => {
       // else, we're toggling on
       chrome.storage.sync.set({'activated' : true}, () => {
         console.log('speech recognition activated');
+        chrome.browserAction.setBadgeText({text : 'On'});
+        chrome.browserAction.setBadgeBackgroundColor({color : '#00FF00'});
         speechRecognition.start();
       });
     });
 });
+
+// start it, if relevant
+getActivated()
+  .then(() => {
+    chrome.browserAction.setBadgeText({text : 'On'});
+    chrome.browserAction.setBadgeBackgroundColor({color : '#00FF00'});
+    speechRecognition.start();
+  }, () => {
+    chrome.browserAction.setBadgeText({text : 'Off'});
+    chrome.browserAction.setBadgeBackgroundColor({color : '#FF0000'});
+  });
 
 
 chrome.runtime.onInstalled.addListener(details => {

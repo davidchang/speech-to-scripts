@@ -12,10 +12,10 @@ class MainSection extends Component {
 
     return (
       <section className="main">
-        <ul style={{'list-style-type' : 'none', 'padding-left' : '0px'}}>
+        <ul style={{'listStyleType' : 'none', 'paddingLeft' : '0px'}}>
           {(speechCommands.commands || []).map((command, i) => {
             return (
-              <li style={{'padding' : '20px 0px', 'border-bottom' : '1px solid #CCC'}}>
+              <li key={`command_${i}`} style={{'padding' : '25px 0px', 'borderBottom' : '1px solid #CCC'}}>
                 <SpeechCommand id={i} command={command} actions={actions} />
               </li>
             );
