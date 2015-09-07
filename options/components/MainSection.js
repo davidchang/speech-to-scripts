@@ -16,7 +16,11 @@ class MainSection extends Component {
           {(speechCommands.commands || []).map((command, i) => {
             return (
               <li key={`command_${i}`} style={{'padding' : '25px 0px', 'borderBottom' : '1px solid #CCC'}}>
-                <SpeechCommand id={i} command={command} actions={actions} />
+                <SpeechCommand
+                  id={i}
+                  command={command}
+                  debugMessage={speechCommands.debugMessage}
+                  actions={actions} />
               </li>
             );
           })}

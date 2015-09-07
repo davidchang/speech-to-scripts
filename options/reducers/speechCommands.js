@@ -4,9 +4,7 @@ import DEFAULT_COMMANDS from '../constants/DefaultCommands';
 
 const initialState = {
   commands : [],
-  debugMessage : {
-    text: "next song"
-  }
+  debugMessage : {}
 };
 
 export default function speechCommands(state = initialState, action) {

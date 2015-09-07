@@ -31,27 +31,21 @@ var processResult = result => {
 
     console.log('commands', commands);
 
-    var pertinentCommands = _.filter(commands.commands, command => {
-      // console.log('command.keywords', command.keywords);
-      // if (!command.regex) {
-      //   return command.keywords.toLowerCase() == result;
-      // }
+    _.each(commands.commands, command => {
+      if (!command.keywords) {
+        return;
+      }
 
       // probably don't want to do this everytime
       var regex = new RegExp(command.keywords);
-      return regex.test(result);
-    });
+      var regexResults = regex.exec(result);
+      if (!regexResults) {
+        return;
+      }
 
-    _.each(pertinentCommands, command => {
-      var regex = new RegExp(command.keywords);
-      // console.log('command.script', command.script);
       console.log('command running:', command);
 
-      // if (command.domains !== '*') {
-      //   execute(command.script, regex.exec(result).splice(1));
-      // } else {
-        (captured => eval(command.script))(regex.exec(result).splice(1));
-      // }
+      (captured => eval(command.script))(regexResults.splice(1));
     });
 
   });

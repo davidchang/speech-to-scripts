@@ -3,7 +3,7 @@
   "description": "Speech to Script",
   "version": "0.1",
   "icons": {
-    "128": "icons/mario.png"
+    "128": "icons/icon.png"
   },
   "background": {
     "scripts": [
@@ -12,7 +12,7 @@
   },
   "options_page": "options/options.html",
   "browser_action": {
-    "default_icon" : "icons/mario.png",
+    "default_icon" : "icons/icon.png",
     "default_title" : "Speech to Script"
   },
   "manifest_version": 2,

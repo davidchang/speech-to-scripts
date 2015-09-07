@@ -4,7 +4,13 @@ import AceEditor from 'react-ace';
 class SpeechCommand extends Component {
 
   render() {
-    const {command, id, actions} = this.props;
+    const {command, id, debugMessage, actions} = this.props;
+
+    let regexResults;
+    try {
+      let regex = new RegExp(command.keywords);
+      regexResults = regex.exec(debugMessage.text);
+    } catch(e) {}
 
     const onScriptChange = (updatedText) => {
       actions.update(id, {
@@ -20,9 +26,29 @@ class SpeechCommand extends Component {
       });
     };
 
+    const getDebugHtml = () => {
+      if (debugMessage && debugMessage.text && regexResults) {
+        return (
+          <div style={{color: 'red'}}>
+            <p>
+              <strong>Debug</strong>: Command matched!
+            </p>
+            {(regexResults.length > 1) && (
+              <p>
+                <strong>Captured from regular expression</strong>: {JSON.stringify(regexResults.splice(1))}
+              </p>
+            )}
+          </div>
+        );
+      }
+    };
+
 
     return (
       <section>
+
+        {getDebugHtml()}
+
         <div style={{marginBottom: '5px'}}>
           <strong>Regular expression to match speech</strong>:
           <a style={{float : 'right'}} href="#" onClick={() => this.props.actions.remove(id)}>Remove</a>

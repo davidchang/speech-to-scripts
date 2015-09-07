@@ -12,7 +12,7 @@ class Debugger extends Component {
   }
 
   componentWillUnmount() {
-    // TODO this probably doesn't actually get removed as intended
+    // TODO doubtful that this actually gets removed as intended
     chrome.extension.onMessage.removeListener(this.debugMessageListener);
   }
 
@@ -31,7 +31,7 @@ class Debugger extends Component {
               <strong>Speech received</strong>: {this.props.speechCommands.debugMessage.text}
             </p>
             <p>
-              Commands matching the received speech string are designated below.
+              Commands matching the received speech string are designated below in red.
             </p>
           </section>
         )}

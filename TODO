@@ -1,3 +1,3 @@
-- fix remove command
-- highlight of commands for debugger
-- default commands
+- support remove command
+- properly load default commands
+- ask for permission correctly
