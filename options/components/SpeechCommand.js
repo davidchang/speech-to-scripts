@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import AceEditor from 'react-ace';
+import SpeechCommandScript from './SpeechCommandScript';
 
 class SpeechCommand extends Component {
 
   render() {
-    const {command, id, debugMessage, actions} = this.props;
+    const {command, id, debugMessage, actions, resetId} = this.props;
 
     let regexResults;
     try {
@@ -12,21 +12,14 @@ class SpeechCommand extends Component {
       regexResults = regex.exec(debugMessage.text);
     } catch(e) {}
 
-    const onScriptChange = (updatedText) => {
-      actions.update(id, {
-        ...command,
-        script : updatedText
-      });
-    };
-
-    const onKeywordChange = (event) => {
+    let onKeywordChange = (event) => {
       actions.update(id, {
         ...command,
         keywords : event.target.value
       });
     };
 
-    const getDebugHtml = () => {
+    let getDebugHtml = () => {
       if (debugMessage && debugMessage.text && regexResults) {
         return (
           <div style={{color: 'red'}}>
@@ -67,14 +60,11 @@ class SpeechCommand extends Component {
           <strong>Script to execute</strong> (utilize the `captured` array, as well as jQuery):
         </div>
 
-        <AceEditor
-          mode="javascript"
-          theme="github"
-          width="100%"
-          maxLines={20}
-          onChange={onScriptChange}
-          value={command.script}
-          name={`command-${id}`} />
+        <SpeechCommandScript
+          id={id}
+          command={command}
+          actions={actions}
+          resetId={resetId} />
       </section>
     );
   }

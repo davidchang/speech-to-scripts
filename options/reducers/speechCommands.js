@@ -4,7 +4,8 @@ import DEFAULT_COMMANDS from '../constants/DefaultCommands';
 
 const initialState = {
   commands : [],
-  debugMessage : {}
+  debugMessage : {},
+  resetId : 0
 };
 
 export default function speechCommands(state = initialState, action) {
@@ -28,7 +29,8 @@ export default function speechCommands(state = initialState, action) {
   case types.RESTORE_DEFAULTS:
     return {
       ...state,
-      commands : DEFAULT_COMMANDS
+      commands : DEFAULT_COMMANDS,
+      resetId : state.resetId + 1
     };
 
   case types.UPDATE:
@@ -49,11 +51,11 @@ export default function speechCommands(state = initialState, action) {
       commands : action.speechCommands.commands
     };
 
-  // TODO implement - still buggy in combination with react-ace-editor
   case types.REMOVE:
     return {
       ...state,
-      commands : state.commands.filter((command, i) => i !== action.index)
+      commands : state.commands.filter((command, i) => i !== action.index),
+      resetId : state.resetId + 1
     };
 
   case types.LOG_DEBUG_MESSAGE:

@@ -19,6 +19,7 @@ class MainSection extends Component {
                 <SpeechCommand
                   id={i}
                   command={command}
+                  resetId={speechCommands.resetId}
                   debugMessage={speechCommands.debugMessage}
                   actions={actions} />
               </li>
@@ -32,7 +33,7 @@ class MainSection extends Component {
 }
 
 MainSection.propTypes = {
-  speechCommands: PropTypes.array.isRequired,
+  speechCommands: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 };
 
