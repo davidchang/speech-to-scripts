@@ -13,13 +13,7 @@ var getCommands = () => {
 
   var getCommandsPromise = Q.defer();
 
-  chrome.storage.sync.get('options', value => {
-    if (_.isObject(value.options)) {
-      getCommandsPromise.resolve(value.options || defaultCommands);
-    } else {
-      getCommandsPromise.resolve(defaultCommands);
-    }
-  });
+  chrome.storage.sync.get('options', value => getCommandsPromise.resolve(value.options));
 
   return getCommandsPromise.promise;
 

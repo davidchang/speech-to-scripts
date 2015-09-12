@@ -57,7 +57,7 @@ class SpeechCommand extends Component {
         </div>
 
         <div style={{marginBottom: '5px'}}>
-          <strong>Script to execute</strong> (utilize the `captured` array, as well as jQuery):
+          <strong>Script to execute</strong> (utilize the <pre>captured</pre> array for regex captured vars; jQuery 2.1 is also available):
         </div>
 
         <SpeechCommandScript

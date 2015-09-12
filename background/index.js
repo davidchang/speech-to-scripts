@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as speechRecognition from './speechRecognition';
+import DEFAULT_COMMANDS from '../options/constants/DefaultCommands';
 
 import getActivated from './getActivated';
 
@@ -96,16 +97,20 @@ chrome.runtime.onInstalled.addListener(details => {
   console.log('details', details);
   if (_.contains(['install', 'update'], details.reason)) {
     chrome.storage.sync.get('speechEnabled', value => {
-      console.log('value', value);
-    });
-
-    // TODO: just for now, logic needs to fix to chrome.tabs.create only when speechEnabled is falsy
-    return;
-
-    chrome.tabs.create({
-      url : chrome.extension.getURL('permissions/askForPermission.html')
+      if (value.speechEnabled !== true) {
+        chrome.tabs.create({
+          url : chrome.extension.getURL('permissions/askForPermission.html')
+        });
+      }
     });
   }
 
-  // TODO: populate Chrome storage with defaultCommands preemptively
+  getCommands().then(commands => {
+    console.log('commands!', commands);
+    if (!commands || !commands.length) {
+      chrome.storage.sync.set({
+        options : DEFAULT_COMMANDS
+      });
+    }
+  });
 });

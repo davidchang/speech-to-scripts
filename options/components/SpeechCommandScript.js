@@ -36,7 +36,10 @@ class SpeechCommandScript extends Component {
         onChange={onScriptChange}
         onLoad={onLoad}
         value={command.script}
-        name={`command-${id}`} />
+        name={`command-${id}`}
+        editorProps={{
+          $blockScrolling : Infinity
+        }} />
     );
   }
 }

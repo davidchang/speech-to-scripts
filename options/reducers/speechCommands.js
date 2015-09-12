@@ -21,7 +21,7 @@ export default function speechCommands(state = initialState, action) {
 
   case types.SAVE:
     chrome.storage.sync.set({
-      'options' : state
+      options : state.commands
     });
 
     return state;

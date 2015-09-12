@@ -23,12 +23,11 @@ export function update(index, newCommand) {
 
 export function loadSpeechCommands() {
   return dispatch => {
-    // { type: types.SAVE }
     chrome.storage.sync.get('options', value => {
       if (_.isObject(value.options)) {
         dispatch({
           type: types.SPEECH_COMMANDS_LOADED,
-          speechCommands: value.options
+          speechCommands: { commands : value.options }
         });
       }
     });

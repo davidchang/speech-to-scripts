@@ -181,7 +181,7 @@ var defaultCommands = [
   },
   {
     'keywords' : '^open my tabs',
-    'script' : 'window.open("http://facebook.com");window.open("http://twitter.com");window.open("http://echojs.com");',
+    'script' : 'window.open("http://facebook.com");\nwindow.open("http://twitter.com");\nwindow.open("http://echojs.com");',
     'domains' : '*'
   },
   {
@@ -189,26 +189,26 @@ var defaultCommands = [
     'script' : convertFunctionToString(search),
     'domains' : '*'
   },
-  // {
-  //   'keywords' : '^show me (?:pictures|images|pics|an image|a picture|a pic) of (.*)',
-  //   'script' : convertFunctionToString(imageSearch),
-  //   'domains' : '*'
-  // },
-  // {
-  //   'keywords' : '^show me (?:videos|a video|a vid) of (.*)',
-  //   'script' : convertFunctionToString(videoSearch),
-  //   'domains' : '*'
-  // },
-  // {
-  //   'keywords' : '^show me a map of (.*)',
-  //   'script' : convertFunctionToString(mapSearch),
-  //   'domains' : '*'
-  // },
-  // {
-  //   'keywords' : '^get directions to (.*) from (.*)',
-  //   'script' : convertFunctionToString(directionsSearch),
-  //   'domains' : '*'
-  // },
+  {
+    'keywords' : '^show me (?:pictures|images|pics|an image|a picture|a pic) of (.*)',
+    'script' : convertFunctionToString(imageSearch),
+    'domains' : '*'
+  },
+  {
+    'keywords' : '^show me (?:videos|a video|a vid) of (.*)',
+    'script' : convertFunctionToString(videoSearch),
+    'domains' : '*'
+  },
+  {
+    'keywords' : '^show me a map of (.*)',
+    'script' : convertFunctionToString(mapSearch),
+    'domains' : '*'
+  },
+  {
+    'keywords' : '^get directions to (.*) from (.*)',
+    'script' : convertFunctionToString(directionsSearch),
+    'domains' : '*'
+  },
   {
     'keywords' : '^play (.*)',
     'script' : convertFunctionToString(musicSearch),

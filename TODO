@@ -1,5 +1,2 @@
-- properly load default commands in the beginning
-- ask for permission correctly
-- add README
 - take a video of usage
 - test that saving a command correctly comes into effect once you save it
