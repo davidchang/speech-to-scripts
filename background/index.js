@@ -46,7 +46,8 @@ var processResult = result => {
 
       console.log('command running:', command);
 
-      if (command.script.indexOf('captured') > -1 || command.script.indexOf('$') > -1) {
+      // only run via executeScript if the jQuery $ is used
+      if (command.script.indexOf('$') > -1) {
         execute(command.script, regexResults.splice(1));
       } else {
         (captured => eval(command.script))(regexResults.splice(1));

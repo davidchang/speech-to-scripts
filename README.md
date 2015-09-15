@@ -4,6 +4,7 @@
 
 # Installing into Chrome
 
+0. Pull down the Github repository, run `npm install && webpack`
 1. Go to `chrome://extensions`
 2. Developer Mode should be checked
 3. "Load unpacked extensions"
