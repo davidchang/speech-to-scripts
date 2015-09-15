@@ -17,7 +17,7 @@
     "lodash": "^3.10.1",
     "q": "^1.0.1",
     "react": "^0.13.3",
-    "react-ace": "^2.0.3",
+    "react-ace": "hasdavidc/react-ace",
     "react-redux": "^0.8.0",
     "redux": "^1.0.0-rc",
     "redux-logger": "0.0.3",
