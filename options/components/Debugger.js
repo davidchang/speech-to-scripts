@@ -16,7 +16,6 @@ class Debugger extends Component {
     chrome.extension.onMessage.removeListener(this.debugMessageListener);
   }
 
-
   render() {
     return (
       <section style={{

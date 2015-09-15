@@ -8,7 +8,7 @@ var search = () => {
     'google': 'https://www.google.com/search?q=%s',
     'yahoo': 'http://search.yahoo.com/search?p=%s'
   };
-  var query = captured[0];
+  var query = captured;
 
   var getSearchEngineRegex = new RegExp('(.*) on (google|bing|ask|yahoo)$');
   var searchEngine = getSearchEngineRegex.exec(query);
@@ -35,7 +35,7 @@ var imageSearch = () => {
     'imgur': 'http://imgur.com/gallery?q=%s',
     'yahoo': 'http://images.search.yahoo.com/search/images?p=%s'
   };
-  var query = captured[0];
+  var query = captured;
 
   var getSearchEngineRegex = new RegExp('(.*) on (ask|bing|flickr|google|imgur|yahoo)$');
   var searchEngine = getSearchEngineRegex.exec(query);
@@ -66,7 +66,7 @@ var videoSearch = () => {
     'vimeo': 'http://vimeo.com/search?q=%s',
     'youtube': 'https://www.youtube.com/results?search_query=%s'
   };
-  var query = captured[0];
+  var query = captured;
 
   var getSearchEngineRegex = new RegExp('(.*) on (ask|bing|dailymotion|google|hulu|metacafe|netflix|twitch|vimeo|youtube)$');
   var searchEngine = getSearchEngineRegex.exec(query);
@@ -90,7 +90,7 @@ var mapSearch = () => {
     'bing': 'http://www.bing.com/maps/?q=%s',
     'yahoo': 'http://maps.yahoo.com/#q=%s'
   };
-  var query = captured[0];
+  var query = captured;
 
   var getSearchEngineRegex = new RegExp('(.*) on (google|bing|yahoo)$');
   var searchEngine = getSearchEngineRegex.exec(query);
@@ -112,7 +112,7 @@ var directionsSearch = () => {
   var options = {
     'google': 'http://maps.google.com/maps?daddr=%s'
   };
-  var query = captured[0];
+  var query = captured;
 
   window.open(options.google.replace('%s', encodeURIComponent(query)));
 };
@@ -128,7 +128,7 @@ var musicSearch = () => {
     'spotify': 'https://play.spotify.com/search/%s',
     'youtube': 'http://www.youtube.com/results?search_query=%s'
   };
-  var query = captured[0];
+  var query = captured;
 
   var getSearchEngineRegex = new RegExp('(.*) on (amazon|google|grooveshark|lastfm|pandora|soundcloud|spotify|youtube)$');
   var searchEngine = getSearchEngineRegex.exec(query);
@@ -171,68 +171,59 @@ var nextSongPandora = () => {
 var defaultCommands = [
   {
     'keywords' : '^alert hello',
-    'script' : 'alert("hello");',
-    'domains' : '*'
+    'script' : 'alert("hello");'
   },
   {
     'keywords' : '^show me google',
-    'script' : 'window.open("http://google.com")',
-    'domains' : '*'
+    'script' : 'window.open("http://google.com")'
   },
   {
     'keywords' : '^open my tabs',
-    'script' : 'window.open("http://facebook.com");\nwindow.open("http://twitter.com");\nwindow.open("http://echojs.com");',
-    'domains' : '*'
+    'script' : 'window.open("http://facebook.com");\nwindow.open("http://twitter.com");\nwindow.open("http://echojs.com");'
   },
   {
     'keywords' : '^search for (.*)',
-    'script' : convertFunctionToString(search),
-    'domains' : '*'
+    'script' : convertFunctionToString(search)
   },
   {
     'keywords' : '^show me (?:pictures|images|pics|an image|a picture|a pic) of (.*)',
-    'script' : convertFunctionToString(imageSearch),
-    'domains' : '*'
+    'script' : convertFunctionToString(imageSearch)
   },
   {
     'keywords' : '^show me (?:videos|a video|a vid) of (.*)',
-    'script' : convertFunctionToString(videoSearch),
-    'domains' : '*'
+    'script' : convertFunctionToString(videoSearch)
   },
   {
     'keywords' : '^show me a map of (.*)',
-    'script' : convertFunctionToString(mapSearch),
-    'domains' : '*'
+    'script' : convertFunctionToString(mapSearch)
   },
   {
     'keywords' : '^get directions to (.*) from (.*)',
-    'script' : convertFunctionToString(directionsSearch),
-    'domains' : '*'
+    'script' : convertFunctionToString(directionsSearch)
   },
   {
     'keywords' : '^play (.*)',
-    'script' : convertFunctionToString(musicSearch),
-    'domains' : '*'
+    'script' : convertFunctionToString(musicSearch)
   },
   {
     'keywords' : '^click on (.*)',
-    'script' : convertFunctionToString(clickOn),
-    'domains' : '*'
+    'script' : convertFunctionToString(clickOn)
   },
   {
     'keywords' : '(stop|start) playing pandora',
-    'script' : convertFunctionToString(playPandora),
-    'domains' : 'pandora.com'
+    'script' : convertFunctionToString(playPandora)
   },
   {
     'keywords' : 'thumbs (up|down)',
-    'script' : convertFunctionToString(thumbsUpOrDownPandora),
-    'domains' : 'pandora.com'
+    'script' : convertFunctionToString(thumbsUpOrDownPandora)
   },
   {
     'keywords' : 'next song',
-    'script' : convertFunctionToString(nextSongPandora),
-    'domains' : 'pandora.com'
+    'script' : convertFunctionToString(nextSongPandora)
+  },
+  {
+    'keywords' : 'open pandora',
+    'script' : 'window.open("http://pandora.com")'
   }
 ];
 

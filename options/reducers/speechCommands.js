@@ -38,7 +38,10 @@ export default function speechCommands(state = initialState, action) {
       ...state,
       commands : state.commands.map((command, i) => {
         if (i === action.index) {
-          return action.newCommand;
+          return {
+            ...command,
+            ...action.newCommand
+          };
         }
 
         return command;

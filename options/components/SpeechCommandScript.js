@@ -22,7 +22,6 @@ class SpeechCommandScript extends Component {
       }
 
       actions.update(id, {
-        ...command,
         script : updatedText
       });
     };

@@ -25,14 +25,14 @@ var execute = (script, args) => {
       }
     });
   });
-}
+};
 
 var processResult = result => {
-  getCommands().then(commands => {
+  getCommands().then((commands) => {
 
     console.log('commands', commands);
 
-    _.each(commands.commands, command => {
+    _.each(commands, command => {
       if (!command.keywords) {
         return;
       }
@@ -46,7 +46,11 @@ var processResult = result => {
 
       console.log('command running:', command);
 
-      (captured => eval(command.script))(regexResults.splice(1));
+      if (command.script.indexOf('captured') > -1 || command.script.indexOf('$') > -1) {
+        execute(command.script, regexResults.splice(1));
+      } else {
+        (captured => eval(command.script))(regexResults.splice(1));
+      }
     });
 
   });
